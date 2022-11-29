@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="20221128135600-1" author="huynh (generated)">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_approvalmaster"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+            <column defaultValue="UNVERIFIED" name="user_status" type="varchar(32)"/>
+            <column name="fk_user_detail" type="BIGINT"/>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP"/>
+            <column defaultValueNumeric="0" name="is_deleted" type="tinyint(1)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20221128135600-2" author="huynh (generated)">
+        <createTable tableName="user_detail">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_userdetail"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="TIMESTAMP"/>
+            <column name="phone_no" type="VARCHAR(255)"/>
+            <column defaultValue="NONE" name="two_fa_type" type="varchar(32)"/>
+            <column name="secret_key" type="VARCHAR(255)"/>
+            <column name="first_name" type="varchar(512)"/>
+            <column name="middle_name" type="varchar(512)"/>
+            <column name="last_name" type="varchar(512)"/>
+            <column name="full_name" type="varchar(512)"/>
+            <column defaultValueNumeric="0" name="is_deleted" type="tinyint(1)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20221128135600-3" author="huynh (generated)">
+        <addForeignKeyConstraint baseColumnNames="fk_user_detail" baseTableName="user"
+                                 constraintName="FK_USER_ON_FK_USER_DETAIL" referencedColumnNames="id"
+                                 referencedTableName="user_detail"/>
+    </changeSet>
+</databaseChangeLog>

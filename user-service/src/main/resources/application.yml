@@ -1,0 +1,55 @@
+
+# ===================================================================
+# Server specific properties
+# ===================================================================
+server:
+  port: 8100
+# ===================================================================
+# Spring specific properties
+# ===================================================================
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: Hikari
+      auto-commit: false
+    url: ${DB_URL:jdbc:mysql://localhost:3306/my_user_service?useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8&useSSL=false}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      hibernate.jdbc.time_zone: UTC
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.autocommit: false
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+      hibernate.format_sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+          # ===================================================================
+  # Feign client config
+  # ===================================================================
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+        loggerLevel: basic

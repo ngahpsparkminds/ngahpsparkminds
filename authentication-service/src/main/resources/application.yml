@@ -1,0 +1,17 @@
+server:
+  port: 9700
+  
+spring:
+  application:
+    name: authentication-service
+
+client:
+  services:
+    user-service: ${USER_SERVICE_URL:http://localhost:8100}
+
+application:
+  security:
+    jwt:
+      token-expiration: 6000000
+      renew-expiration: 300000000
+      key: MTkwN2ExMDAwMzQ3Y2IxNjZmMDBlYmFiZGIyY2I0MWFkNWU3M2YzMzYzZTQ3NTlmYTE0MDhiYmQ3ZjQyNzFkZmZhZGU3M2U2NWVlNGQxMjJh
