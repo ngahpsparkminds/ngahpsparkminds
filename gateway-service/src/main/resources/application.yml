@@ -1,0 +1,94 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /gw
+spring:
+  application:
+    name: zuul-gateway-service
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    cluster:
+      nodes: ${REDIS_CLUSTER_NODES:}
+      maxRedirects: ${REDIS_CLUSTER_MAX_REDIRECT:10}
+    password: ${REDIS_PASSWORD:}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  # ===================================================================
+  # Zuul Gateway config
+  # ===================================================================
+zuul:
+  routes:
+    user-service:
+      path: /user/**
+      url:  ${USER_SERVICE_URL:http://localhost:8100}
+    authentication-service:
+      path: /auth/**
+      url:  ${AUTHENTICATION_SERVICE_URL:http://localhost:9700}
+      sensitive-headers:
+  host:
+    connect-timeout-millis: ${ZUUL_CONNECTION_TIMEOUT:60000}
+    socket-timeout-millis: ${ZUUL_SOCKET_TIMEOUT:60000}
+    max-total-connections: ${ZUUL_MAX_TOTAL_CONNECTION:10000}
+    time-unit: milliseconds
+  force-original-query-string-encoding: true
+  # ===================================================================
+  # Feign config
+  # ===================================================================
+exchange:
+  services:
+    user-service:
+      url: ${USER_SERVICE_URL:http://localhost:8100}
+    setting-service:
+      url: ${SETTING_SERVICE_URL:http://localhost:9800}
+    authentication-service:
+      url: ${AUTHENTICATION_SERVICE_URL:http://localhost:9700}
+  # ===================================================================
+  # Security URL config
+  # ===================================================================
+application:
+  security:
+    uri:
+      restricts: /**/internal/**, /*/api/private/roles/1
+      privates: /**/private/**
+      commons: /swagger-ui/**, /swagger-resources/**, /**/v2/api-docs, /**/v3/api-docs, /**/common/**, /**/api/private/auth
+    jwt: 
+      secret: ${JWT_SECRET:MTkwN2ExMDAwMzQ3Y2IxNjZmMDBlYmFiZGIyY2I0MWFkNWU3M2YzMzYzZTQ3NTlmYTE0MDhiYmQ3ZjQyNzFkZmZhZGU3M2U2NWVlNGQxMjJhYzI0NThlNzQ3OGE4NjczY2Y0MWQ0ZTQ0Y2JkMTE0MTRhNTdmZTE0NTY1MTRkYmU=}
+  cookie:
+    sameSite: ${COOKIE_SAME_SITE:NONE}
+    maxAge: ${COOKIE_MAX_AGE:true}
+    path: ${COOKIE_PATH:/}
+    httpOnly: ${COOKIE_HTTP_ONLY:true}
+    secure: ${COOKIE_SECURE:true}
+    domain:
+      user-domains: ${COOKIE_USER_DOMAIN:localhost, maxbit.com}
+      admin-domains: ${COOKIE_ADMIN_DOMAIN:localhost, maxbit.com}
+  cors:
+    allowed-origins: ${CORS_ALLOW_ORIGINS:*}
+    allowed-methods: ${CORS_ALLOW_METHODS:*}
+    allowed-headers: ${CORS_ALLOW_HEADERS:*}
+    exposed-headers: ${CORS_EXPOSED_HEADERS:X-Total-Count, Link}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+
+system:
+  config:
+    cache:
+      user-agent: 10000
+
+management:
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springfox:
+  documentation:
+    enabled: ${SWAGGER_ENABLE:true}
